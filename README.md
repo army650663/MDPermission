@@ -40,5 +40,15 @@ dependencies {
                          Log.i(TAG, "fail: " + perms.toString());
                      }
                  });
+         
  ``` 
+ #### 重要
+ ##### 必須接入 onRequestPermissionsResult
+ ``` java
+     @Override
+     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+         MDPermission.onRequestPermissionsResult(requestCode, permissions, grantResults);
+     }
+ ```
 

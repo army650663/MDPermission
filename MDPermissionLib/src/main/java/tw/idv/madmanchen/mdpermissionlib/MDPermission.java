@@ -32,7 +32,7 @@ public class MDPermission {
     private String[] mPermissions;
     private String mRationaleBtnText = "OK";
     private Map<String, String> mRationaleMap;
-    private DialogInterface.OnClickListener mRationableOnClickListener;
+    private DialogInterface.OnClickListener mRationaleOnClickListener;
     private static PermissionCallbacks mCallbacks;
 
     public interface PermissionCallbacks {
@@ -99,7 +99,7 @@ public class MDPermission {
      * @param onClickListener 監聽器
      */
     public MDPermission setRationaleOnClickListener(DialogInterface.OnClickListener onClickListener) {
-        mRationableOnClickListener = onClickListener;
+        mRationaleOnClickListener = onClickListener;
         return this;
     }
 
@@ -118,8 +118,8 @@ public class MDPermission {
                     String rationale = mRationaleMap.get(permission);
                     if (rationale != null) {
                         mBuilder.setMessage(rationale);
-                        if (mRationableOnClickListener != null) {
-                            mBuilder.setNegativeButton(mRationaleBtnText, mRationableOnClickListener);
+                        if (mRationaleOnClickListener != null) {
+                            mBuilder.setNegativeButton(mRationaleBtnText, mRationaleOnClickListener);
                         } else {
                             mBuilder.setNegativeButton(mRationaleBtnText, new DialogInterface.OnClickListener() {
                                 @Override

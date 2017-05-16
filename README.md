@@ -1,4 +1,4 @@
-# MDPermission
+# MDHttpAsyncTask
 ## 使用
 **1. Gradle dependency** (recommended)
 
@@ -44,8 +44,8 @@ dependencies {
          
  ``` 
  
- #### 重要
- ##### 必須接入 `onRequestPermissionsResult`
+#### 重要
+##### 必須接入 onRequestPermissionsResult
  
  ``` java
      @Override

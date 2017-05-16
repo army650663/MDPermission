@@ -18,6 +18,7 @@ dependencies {
 	compile 'com.github.army650663:MDPermission:v1.0.0'
 }
 ```
+
 #### 範例
 ##### 取得權限
  
@@ -42,6 +43,7 @@ dependencies {
                  });
          
  ``` 
+ 
  #### 重要
  ##### 必須接入 onRequestPermissionsResult
  

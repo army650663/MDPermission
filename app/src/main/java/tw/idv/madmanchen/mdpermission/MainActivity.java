@@ -1,15 +1,16 @@
 package tw.idv.madmanchen.mdpermission;
 
 import android.Manifest;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
 
 import tw.idv.madmanchen.mdpermissionlib.MDPermission;
+import tw.idv.madmanchen.mdpermissionlib.PermissionCallbacks;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 .addPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS)
                 .addRationale(map)
                 .setRationaleButtonText("好Der")
-                .start(new MDPermission.PermissionCallbacks() {
+                .start(new PermissionCallbacks() {
                     @Override
                     public void success(List<String> perms) {
                         Log.i(TAG, "success: " + perms.toString());

@@ -35,12 +35,6 @@ public class MDPermission {
     private DialogInterface.OnClickListener mRationaleOnClickListener;
     private static PermissionCallbacks mCallbacks;
 
-    public interface PermissionCallbacks {
-        void success(List<String> grantedList);
-
-        void fail(List<String> deniedList);
-    }
-
     public MDPermission(Activity activity) {
         mActivity = activity;
         mBuilder = new AlertDialog.Builder(mActivity);
@@ -135,6 +129,8 @@ public class MDPermission {
                 } else { // 無權限說明 直接要求權限
                     ActivityCompat.requestPermissions(mActivity, mPermissions, mRequestCode);
                 }
+            } else {
+                mCallbacks.success(null);
             }
         }
     }

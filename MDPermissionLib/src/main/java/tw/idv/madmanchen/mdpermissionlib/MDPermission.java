@@ -104,34 +104,43 @@ public class MDPermission {
      */
     public void start(PermissionCallbacks callbacks) {
         mCallbacks = callbacks;
+        List<String> permissionList = new ArrayList<>(mPermissions.length);
         for (final String permission : mPermissions) {
-            // 檢查是否已有權限
             if (!havePermission(permission)) {
-                // 檢查是否要顯示權限說明
-                if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permission) && mRationaleMap != null) {
-                    String rationale = mRationaleMap.get(permission);
-                    if (rationale != null) {
-                        mBuilder.setMessage(rationale);
-                        if (mRationaleOnClickListener != null) {
-                            mBuilder.setNegativeButton(mRationaleBtnText, mRationaleOnClickListener);
-                        } else {
-                            mBuilder.setNegativeButton(mRationaleBtnText, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
-                                }
-                            });
-                        }
-                        mBuilder.show();
-                    } else {
-                        ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
-                    }
-                } else { // 無權限說明 直接要求權限
-                    ActivityCompat.requestPermissions(mActivity, mPermissions, mRequestCode);
-                }
-            } else {
-                mCallbacks.success(null);
+                permissionList.add(permission);
             }
+        }
+
+        if (permissionList.size() > 0) {
+            for (final String permission : permissionList) {
+                // 檢查是否已有權限
+                if (!havePermission(permission)) {
+                    // 檢查是否要顯示權限說明
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permission) && mRationaleMap != null) {
+                        String rationale = mRationaleMap.get(permission);
+                        if (rationale != null) {
+                            mBuilder.setMessage(rationale);
+                            if (mRationaleOnClickListener != null) {
+                                mBuilder.setNegativeButton(mRationaleBtnText, mRationaleOnClickListener);
+                            } else {
+                                mBuilder.setNegativeButton(mRationaleBtnText, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
+                                    }
+                                });
+                            }
+                            mBuilder.show();
+                        } else {
+                            ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
+                        }
+                    } else { // 無權限說明 直接要求權限
+                        ActivityCompat.requestPermissions(mActivity, mPermissions, mRequestCode);
+                    }
+                }
+            }
+        } else {
+            callbacks.success(null);
         }
     }
 

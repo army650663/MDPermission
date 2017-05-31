@@ -38,7 +38,8 @@ dependencies {
     
  ``` 
 ##### 取得權限並說明理由
-  ``` java
+
+ ``` java
 	HashMap<String, String> map = new HashMap<>();
          map.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "This permission use update");
          map.put(Manifest.permission.READ_SMS, "This permission send sms");

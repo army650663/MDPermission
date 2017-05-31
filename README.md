@@ -37,9 +37,9 @@ dependencies {
             });
     
  ``` 
+ 
 ##### 取得權限並說明理由
-
- ``` java
+``` java
 	HashMap<String, String> map = new HashMap<>();
     map.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "This permission use update");
     map.put(Manifest.permission.READ_SMS, "This permission send sms");
@@ -57,8 +57,9 @@ dependencies {
                     Log.i(TAG, "fail: " + perms.toString());
                 }
             });
-    
- ``` 
+```
+
+
 #### 重要
 ##### 必須接入 onRequestPermissionsResult
  
@@ -69,3 +70,5 @@ dependencies {
          MDPermission.onRequestPermissionsResult(requestCode, permissions, grantResults);
      }
  ```
+
+

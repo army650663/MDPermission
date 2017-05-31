@@ -105,6 +105,8 @@ public class MDPermission {
     public void start(PermissionCallbacks callbacks) {
         mCallbacks = callbacks;
         List<String> permissionList = new ArrayList<>(mPermissions.length);
+
+        // 檢查是否需要要求權限
         for (final String permission : mPermissions) {
             if (!havePermission(permission)) {
                 permissionList.add(permission);
@@ -113,31 +115,29 @@ public class MDPermission {
 
         if (permissionList.size() > 0) {
             for (final String permission : permissionList) {
-                // 檢查是否已有權限
-                if (!havePermission(permission)) {
-                    // 檢查是否要顯示權限說明
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permission) && mRationaleMap != null) {
-                        String rationale = mRationaleMap.get(permission);
-                        if (rationale != null) {
-                            mBuilder.setMessage(rationale);
-                            if (mRationaleOnClickListener != null) {
-                                mBuilder.setNegativeButton(mRationaleBtnText, mRationaleOnClickListener);
-                            } else {
-                                mBuilder.setNegativeButton(mRationaleBtnText, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
-                                    }
-                                });
-                            }
-                            mBuilder.show();
+                // 檢查是否要顯示權限說明
+                if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permission) && mRationaleMap != null) {
+                    String rationale = mRationaleMap.get(permission);
+                    if (rationale != null) {
+                        mBuilder.setMessage(rationale);
+                        if (mRationaleOnClickListener != null) {
+                            mBuilder.setNegativeButton(mRationaleBtnText, mRationaleOnClickListener);
                         } else {
-                            ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
+                            mBuilder.setNegativeButton(mRationaleBtnText, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
+                                }
+                            });
                         }
-                    } else { // 無權限說明 直接要求權限
-                        ActivityCompat.requestPermissions(mActivity, mPermissions, mRequestCode);
+                        mBuilder.show();
+                    } else {
+                        ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
                     }
+                } else { // 無權限說明 直接要求權限
+                    ActivityCompat.requestPermissions(mActivity, mPermissions, mRequestCode);
                 }
+
             }
         } else {
             callbacks.success(null);
@@ -154,6 +154,9 @@ public class MDPermission {
         return isGrant == PackageManager.PERMISSION_GRANTED;
     }
 
+    /**
+     * 要求權限結果回傳
+     */
     public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == mRequestCode) {
             List<String> successList = new ArrayList<>();
@@ -166,6 +169,7 @@ public class MDPermission {
                     failList.add(permissions[i]);
                 }
             }
+
             if (failList.size() > 0) {
                 mCallbacks.fail(failList);
             } else {

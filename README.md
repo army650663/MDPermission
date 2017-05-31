@@ -39,7 +39,6 @@ dependencies {
  ``` 
 ##### 取得權限並說明理由
   ``` java
-    // 權限理由使用 HashMap<權限, 理由> 
 	HashMap<String, String> map = new HashMap<>();
          map.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "This permission use update");
          map.put(Manifest.permission.READ_SMS, "This permission send sms");

@@ -15,7 +15,7 @@ allprojects {
 	 
 ``` gradle
 dependencies {
-    compile 'com.github.army650663:MDPermission:v1.0.0'
+    compile 'com.github.army650663:MDPermission:v1.0.3'
 }
 ```
 
@@ -41,7 +41,7 @@ dependencies {
 ##### 取得權限並說明理由
 **使用者拒絕權限後，下一次要求時顯示權限理由視窗**
 ``` java
-	HashMap<String, String> map = new HashMap<>();
+    HashMap<String, String> map = new HashMap<>();
     map.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "This permission use update");
     map.put(Manifest.permission.READ_SMS, "This permission send sms");
     new MDPermission(this)

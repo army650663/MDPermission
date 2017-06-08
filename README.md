@@ -15,54 +15,42 @@ allprojects {
 	 
 ``` gradle
 dependencies {
-    compile 'com.github.army650663:MDPermission:v1.0.3'
+    compile 'com.github.army650663:MDPermission:v1.0.4'
 }
 ```
 
 #### 範例
 ##### 取得權限
- 
+* setRequestCode(`int requestCode`) : 可選項
+* setMessageView(`String msg`, `String btnText`) : 可選項，使用者第一次拒絕權限後於第二次要求權限示顯示
+
  ``` java
     new MDPermission(this)
-            .addPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS)
-            .start(new MDPermission.PermissionCallbacks() {
-                @Override
-                public void success(List<String> perms) {
-                    Log.i(TAG, "success: " + perms.toString());
-              
-                @Override
-                public void fail(List<String> perms) {
-                    Log.i(TAG, "fail: " + perms.toString());
-                }
-            });
+                    .addPermissions(permissions)
+                    .setRequestCode(1111)
+                    .setMessageView("需要權限才可以完整運行", "好吧")
+                    .start(new PermissionCallbacks() {
+                        @Override
+                        public void success() {
+                            Log.i(TAG, "success: ");
+                        }
+    
+                        @Override
+                        public void fail(List<String> deniedList) {
+                            Log.i(TAG, "fail: " + deniedList.toString());
+                        }
+    
+                        @Override
+                        public void alwaysDenied(List<String> alwaysDeniedList) {
+                            Log.i(TAG, "alwaysDenied: " + alwaysDeniedList.toString());
+                            MDPermission.showDetailSetting(MainActivity.this);
+                        }
+                    });
     
  ``` 
- 
-##### 取得權限並說明理由
-**使用者拒絕權限後，下一次要求時顯示權限理由視窗**
-``` java
-    HashMap<String, String> map = new HashMap<>();
-    map.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "This permission use update");
-    map.put(Manifest.permission.READ_SMS, "This permission send sms");
-    new MDPermission(this)
-            .addPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS)
-            .addRationale(map)
-            .setRationaleButtonText("好Der")
-            .start(new MDPermission.PermissionCallbacks() {
-                @Override
-                public void success(List<String> perms) {
-                    Log.i(TAG, "success: " + perms.toString());
-              
-                @Override
-                public void fail(List<String> perms) {
-                    Log.i(TAG, "fail: " + perms.toString());
-                }
-            });
-```
-
 
 #### 重要
-##### 必須接入 onRequestPermissionsResult
+* ##### 必須接入 onRequestPermissionsResult
  
  ``` java
      @Override

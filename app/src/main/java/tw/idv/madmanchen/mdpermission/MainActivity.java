@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import tw.idv.madmanchen.mdpermissionlib.MDPermissionU;
+import tw.idv.madmanchen.mdpermissionlib.MDPermission;
 import tw.idv.madmanchen.mdpermissionlib.PermissionCallbacks;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.CAMERA
         };
 
-        new MDPermissionU(this)
+        new MDPermission(this)
                 .addPermissions(permissions)
+                .setRequestCode(1111)
                 .setMessageView("需要權限才可以完整運行", "好吧")
                 .start(new PermissionCallbacks() {
                     @Override
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void alwaysDenied(List<String> alwaysDeniedList) {
                         Log.i(TAG, "alwaysDenied: " + alwaysDeniedList.toString());
-                        MDPermissionU.showDetailSetting(MainActivity.this);
+                        MDPermission.showDetailSetting(MainActivity.this);
                     }
                 });
 
@@ -53,6 +54,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MDPermissionU.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MDPermission.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

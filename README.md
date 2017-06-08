@@ -50,7 +50,7 @@ dependencies {
  ``` 
 
 #### 重要
-* ##### 必須接入 onRequestPermissionsResult
+##### 必須接入 `onRequestPermissionsResult`
  
  ``` java
      @Override

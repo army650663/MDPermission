@@ -14,7 +14,9 @@ import java.util.List;
  */
 
 public interface PermissionCallbacks {
-    void success(List<String> grantedList);
+    void success();
 
     void fail(List<String> deniedList);
+
+    void alwaysDenied(List<String> alwaysDeniedList);
 }

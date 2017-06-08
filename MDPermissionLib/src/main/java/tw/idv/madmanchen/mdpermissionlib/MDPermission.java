@@ -3,11 +3,14 @@ package tw.idv.madmanchen.mdpermissionlib;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +30,7 @@ import java.util.Map;
 public class MDPermission {
     public static final String TAG = "MDPermission";
     private static int mRequestCode = 111;
-    private Activity mActivity;
+    private static Activity mActivity;
     private AlertDialog.Builder mBuilder;
     private String[] mPermissions;
     private String mRationaleBtnText = "OK";
@@ -37,12 +40,6 @@ public class MDPermission {
 
     public MDPermission(Activity activity) {
         mActivity = activity;
-        mBuilder = new AlertDialog.Builder(mActivity);
-        mBuilder.setCancelable(false);
-    }
-
-    public MDPermission(Fragment fragment) {
-        mActivity = fragment.getActivity();
         mBuilder = new AlertDialog.Builder(mActivity);
         mBuilder.setCancelable(false);
     }
@@ -126,6 +123,7 @@ public class MDPermission {
                             mBuilder.setNegativeButton(mRationaleBtnText, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
                                     ActivityCompat.requestPermissions(mActivity, new String[]{permission}, mRequestCode);
                                 }
                             });
@@ -140,7 +138,7 @@ public class MDPermission {
 
             }
         } else {
-            callbacks.success(null);
+            callbacks.success();
         }
     }
 
@@ -151,6 +149,14 @@ public class MDPermission {
      */
     private boolean havePermission(String permission) {
         int isGrant = ContextCompat.checkSelfPermission(mActivity, permission);
+        Log.i(TAG, "havePermission: " + isGrant);
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permission)) {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", mActivity.getPackageName(), null);
+            intent.setData(uri);
+            mActivity.startActivity(intent);
+        }
         return isGrant == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -161,6 +167,7 @@ public class MDPermission {
         if (requestCode == mRequestCode) {
             List<String> successList = new ArrayList<>();
             List<String> failList = new ArrayList<>();
+            List<String> neverList = new ArrayList<>();
             for (int i = 0; i < grantResults.length; i++) {
                 boolean isGrant = grantResults[i] == PackageManager.PERMISSION_GRANTED;
                 if (isGrant) {
@@ -173,7 +180,7 @@ public class MDPermission {
             if (failList.size() > 0) {
                 mCallbacks.fail(failList);
             } else {
-                mCallbacks.success(successList);
+                mCallbacks.success();
             }
         }
     }
